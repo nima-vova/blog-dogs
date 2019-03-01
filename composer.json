@@ -1,0 +1,15 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Controllers\\": "Controllers",
+            "Model\\": "model",
+            "Services\\": "services",
+            "Tests\\": "tests",
+            "Config\\": "config"
+        }
+    },
+    "require": {
+        "twig/twig": "v2.4.8",
+        "fzaninotto/faker": "^1.8"
+    }
+}

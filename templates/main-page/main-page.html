@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/templates/main-page/css/main-page.css" />
+    <script src="//code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/templates/main-page/js/navigation-main-page.js"></script>
+    <title>{{ menu }}</title>
+    <script>
+        $(document).ready(function () {
+            //$(document).navigationMainPage(JSON.parse("{{data|e('js')}}"), '{{menu}}');
+            $(document).navigationMainPage();
+            //$("#main-page").navigationMainPage();
+            //$(".content").navigationMainPage();
+        });
+    </script>
+    {# defined - перевіряє, чи визначена змінна  param
+    якщо так, то це значить не аякс (тому плагін js визивається з параметрами-дані і назва меню)
+    Якщо немає param, то просто виводем шаблон
+    #}
+    {% if data is defined %}
+    {# do something #}
+        <script>
+            $(document).ready(function () {
+            // $(document).navigation('width');
+            $(document).navigationMainPage(JSON.parse("{{data|e('js')}}"), '{{menu}}');
+            });
+    </script>
+    {% endif %}
+</head>
+<body>
+<div class="main" >
+<div class="menu" style="float: left; border: 1px solid black">
+    <a id="main-page" class="menu-link" href="javascript:void(0)"> Головна стр</a><br>
+    <a id="contacts-show"  class="menu-link" href="javascript:void(0)"> контакти </a><br>
+    <a id="publications-actual"  class="menu-link" href="javascript:void(0)"> актуальне </a><br>
+    <a href="/fake/load" class="menu-link" style=" color:red; font-size: 16px; font-weight: 1000 ">
+        Завантажити фейкові дані </a><br>
+</div>
+<div class="content">
+    <H1>{{ menu }}</H1>
+    {#
+    {% if menu =="NEWS" %}
+    {% include 'news.html' %}
+    {% elseif menu =="CONTACTS" %}
+    {% include 'contacts.html' %}
+    {% elseif menu =="ACTUAL" %}
+    {% include 'actual.html' %}
+    {% elseif menu =="addRolles" %}
+    {% include 'add-rolles.html' %}
+    {% endif %}
+
+    {% for publication in publications %}
+    <div style="border: 1px solid black" class="">
+        <a href="/publications/show/{{ publication.id|e }}"> {{ publication.name|e }}</a>
+
+    </div>
+    {% endfor %}
+   #}
+</div>
+    <div class="right-menu" style="border: 1px solid red">
+        fjfdfldfjdlfjljffdf
+    </div>
+</div>
+</body>
+
+</html>

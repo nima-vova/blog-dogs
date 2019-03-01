@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/templates/admin/css/admin.css" />
+
+
+        <!--
+        <link rel="stylesheet" media="screen and (max-width: 770px)" type="text/css" href="/css/mobile.css">
+        <link rel="stylesheet" media="screen and (min-width: 770px) and (max-width: 992px)" type="text/css" href="/css/tablet.css">
+        <link media="screen and (min-width: 992px)" rel="stylesheet" type="text/css" href="/css/desktop.css">
+        -->
+
+
+        <script src="//code.jquery.com/jquery-latest.min.js"></script>
+        <script src="/templates/admin/js/navigation.js"></script>
+        <script src="/templates/admin/js/crud-admin.js"></script>
+    <title>{{ menu }}</title>
+    <script>
+        $(document).ready(function () {
+            $("#users-show").navigation();
+            $("#publications-show").navigation();
+            $("#tags-show").navigation();
+
+            // обробляєм подію через делегування -так як кнопочки по видаленню і редагуванню виведених даних
+            // були створені динамічно і тому звичайним шляхом почепить оброботчик на них не вийде,
+            // тому оброботчик вішаєм на блищого предка елемента який був створений не динамічно
+            // (можна і на body але більш доцільніше на блищого предка чіпляти),
+            // а потім в в фунції crudAdmin- вішаєм подію натискання миші і делагуємо цю подію на потомка
+            // створеного динамічно (this.on("click", ".edit-row", function (){...})
+            // також в середені оброботчика this є сам цей потомок якому делегували подію
+            $(".content").crudAdmin();
+
+        });
+    </script>
+    {# defined - перевіряє, чи визначена змінна  param
+       якщо так, то це значить не аякс і виводем весь список сучності,
+       потім перевіряєм якшо є id і вказана дія (action == 'edit'),
+       то визиваєм $(document).crudAdmin('{{id}}') (передавши параметр id елемента для обробки).
+       Якщо немає param, то просто виводем шаблон
+    #}
+    {% if param is defined %}
+    {# do something #}
+    <script>
+    $(document).ready(function () {
+       // $(document).navigation('width');
+        $(document).navigation(JSON.parse("{{param|e('js')}}"), '{{menu}}');
+      });
+    </script>
+       {% if id is defined and action == 'edit' %}
+       {# do something #}
+       <script>
+           $(document).ready(function () {
+              $(document).crudAdmin('{{id}}');
+        });
+    </script>
+    {% endif %}
+       {% endif %}
+</head>
+<body>
+<div class="main" >
+<div class="menu" >
+    <a href="/admin"> Головна стр</a><br>
+    <!--<a id="admin-users-show" href="javascript:void(0)" > Користувачі </a><br>-->
+    <a id="users-show" href="javascript:void(0)" > Користувачі </a><br>
+    <a id="publications-show" href="javascript:void(0)" > Публікаціїї </a><br>
+    <a id="tags-show" href="javascript:void(0)" > Теги </a><br>
+    <a id="users-add-roles" href="/admin/add-roles"> додадати роль </a>"><br>
+</div>
+<div class="content">
+
+
+
+    <!--
+    <H1>{{ menu }}</H1>
+    {% if menu =="NEWS" %}
+    {% include 'news.html' %}
+    {% elseif menu =="add-roles" %}
+    {% include 'add-roles.html' %}
+    {% endif %} -->
+</div>
+<div class="user">
+    {{ menu }}
+</div>
+</div>
+</body>
+</html>

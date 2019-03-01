@@ -1,0 +1,84 @@
+body {
+    background-color: lightgray;
+}
+
+.main {
+    width: 1400px;
+    margin: 0.2% auto;
+    font-family: Ubuntu;
+    text-align: center;
+    white-space: nowrap;
+    background-size: cover;
+    letter-spacing: 10px;
+    overflow: hidden;
+    /*padding: 5px;*/
+    border: 1px solid green;
+    background-color: lightgray;
+}
+
+.menu {
+    /*position: relative;*/
+    /*float: left; */
+    text-align: left;
+    display: inline-block;
+    vertical-align: top;
+    white-space: normal;
+    letter-spacing: normal;
+    border: 1px solid black;
+    width: 170px;
+    /*margin: auto;*/
+    overflow: hidden;
+    padding: 5px;
+    background-color: white;
+
+}
+
+.content {
+    /*float: right; */
+    display: inline-block;
+    vertical-align: top;
+    white-space: normal;
+    letter-spacing: normal;
+    border: 1px solid black;
+    width: 1000px;
+
+    /*margin: 0 auto 1.2% 40%;*/
+    padding: 5px;
+    background-color: white;
+    overflow: hidden;
+}
+
+.show-element {
+    border: 1px solid gold;
+    text-align: left;
+    cursor: pointer;
+}
+
+.img-show-element{
+    align: right;
+    width: 150px;
+    height: 100px;
+}
+
+.div-tags {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.span-tags {
+    background-color: lightskyblue;
+    margin-left: 5px;
+}
+
+.right-menu {
+    display: inline-block;
+    vertical-align: top;
+    white-space: normal;
+    letter-spacing: normal;
+    background-color: white;
+    /*float: right; */
+    padding: 5px;
+    border: 1px solid black;
+    width: 140px;
+    height: 50px;
+}
