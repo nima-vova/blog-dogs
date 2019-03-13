@@ -55,9 +55,9 @@ class TagSelect extends OperationsDb
     // для роута редагування або видалення публікації по id в url(без аякса)
     /**
      * @param $param
-     * @return \stdClass
+     * @return null|\stdClass
      */
-    public function getTagById($param): \stdClass
+    public function getTagById($param): ?\stdClass
     {
         return
             parent::selectElement($this->id, $this->tableName, $param);

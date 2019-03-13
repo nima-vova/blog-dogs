@@ -10,7 +10,6 @@ namespace Model;
 
 use PDO;
 
-
 /**
  * Class UserSelect
  * @package Model
@@ -56,9 +55,9 @@ class UserSelect extends OperationsDb
 
     /**
      * @param $param
-     * @return \stdClass
+     * @return null|\stdClass
      */
-       public function getUserByToken($param): \stdClass
+       public function getUserByToken($param): ?\stdClass
        {
            return
                parent::selectElement($this->token, $this->tableName, $param);
@@ -66,9 +65,9 @@ class UserSelect extends OperationsDb
 
     /**
      * @param $param
-     * @return \stdClass
+     * @return null|\stdClass
      */
-       public function getUserByLogin($param): \stdClass
+       public function getUserByLogin($param): ?\stdClass
        {
            return
                parent::selectElement($this->login, $this->tableName, $param);
@@ -76,9 +75,9 @@ class UserSelect extends OperationsDb
        // для роута редагування або видалення користувача по id в url(без аякса)
     /**
      * @param $param
-     * @return \stdClass
+     * @return null|\stdClass
      */
-       public function getUserById($param): \stdClass 
+       public function getUserById($param): ?\stdClass 
        {
            return
                parent::selectElement($this->id, $this->tableName, $param);

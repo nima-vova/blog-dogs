@@ -10,6 +10,7 @@ namespace Model;
 
 use PDO;
 use PDOException;
+use Config\DbParametersConfig;
 
 /**
  * Class OperationsDb
@@ -17,10 +18,12 @@ use PDOException;
  */
 abstract class OperationsDb implements CrudDb
 {
-    private $host  = 'localhost';
-    protected $dbName = 'blog_dogs';
-    protected $user = 'root';
-    protected $password ='julia';
+    private $dbParameters;
+    protected $host;
+    protected $dbName;
+    protected $user;
+    protected $password;
+
     protected $db;
     public $nameObject;
     public $NewParamsObject;
@@ -34,8 +37,15 @@ abstract class OperationsDb implements CrudDb
      */
     public function __construct()
     {
+        $this->dbParameters = new DbParametersConfig();
+        $this->host  = $this->dbParameters->host;
+        $this->dbName = $this->dbParameters->dbName;
+        $this->user = $this->dbParameters->user;
+        $this->password = $this->dbParameters->password;
+
         try {
-            $this->db = new PDO("mysql:host=$this->host;dbname=$this->dbName", $this->user, $this->password);
+            $this->db = new PDO("mysql:host=$this->host;dbname=$this->dbName",
+                $this->user, $this->password);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->db->exec("set names utf8");
         } catch (PDOException $e) {
@@ -58,13 +68,18 @@ abstract class OperationsDb implements CrudDb
      * @param $fieldName
      * @param $tableName
      * @param $param
-     * @return \stdClass
+     * @return null|\stdClass
      */
     public function selectElement($fieldName, $tableName, $param): \stdClass
     {
         $stmt = $this->db->prepare("SELECT * FROM $tableName WHERE $fieldName = '$param'");
         $stmt->execute();
-        return $stmt->fetchObject();
+        $result = $stmt->fetchObject();
+        //return var_dump($result);
+        if ($result == false) {
+           return null;
+          } 
+        return $result;
     }
 
     /**

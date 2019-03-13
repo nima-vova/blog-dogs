@@ -31,9 +31,9 @@ class AccessControlService
     }
 
     /**
-     * @return bool|mixed|UserSelect
+     * @return null|\stdClass
      */
-    public function checkToken()
+    public function checkToken(): ?\stdClass
     {
         if (isset($this->token)) {
             $user = new UserSelect();
@@ -41,31 +41,31 @@ class AccessControlService
             //var_dump($user);
             //не видалять це потрібно!!!!!!!!!!!!!!!!!!!!!!!!!1
             //if(!empty($user)&& ($user[0]['user_agent']==$this->userAgent)){
-            if (!empty($user)) {
-                return $user;
+            if (is_null($user)) {
+                return null;
             }
         }
-        return false;
+        return $user;
     }
 
     /**
      * @param $login
      * @param $password
-     * @return bool|mixed
+     * @return null|\stdClass
      */
-    public function checkUser($login, $password)
+    public function checkUser($login, $password): ?\stdClass
     {
         //   echo 'good';
         $user = new UserSelect();
         $getUser = $user->getUserByLogin($login);
         var_dump($getUser);
-        if (!empty($getUser) && ($getUser->password == $password)) {
+        if (!is_null($getUser) && ($getUser->password == $password)) {
             $token = 'value20180212';
             setcookie('token', $token);
             //var_dump($getUser);
             $user->alterTokenForUser($login, $token, $this->userAgent);
             return $getUser;
         }
-        return false;
+        return null;
     }
 }

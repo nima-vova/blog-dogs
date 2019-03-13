@@ -59,9 +59,9 @@ class PublicationSelect extends OperationsDb
     // для роута редагування або видалення публікації по id в url(без аякса)
     /**
      * @param $param
-     * @return mixed
+     * @return null|\stdClass
      */
-    public function getPublicationById($param): mixed
+    public function getPublicationById($param): ?\stdClass
     {
         return
                parent::selectElement($this->id, $this->tableName, $param);

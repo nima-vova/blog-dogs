@@ -1,4 +1,3 @@
-/app/config/parameters.yml
-/phpunit.xml
 /vendor/
+/config/db_info.txt
 

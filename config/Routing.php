@@ -27,7 +27,6 @@ class Routing
         $this->adminControllers = new AdminControllers();
         // Разділяємо наш запит на частинки
         $this->routs = explode('/', $_SERVER['REQUEST_URI']);
-
         //var_dump($this->routs);
         //var_dump(get_class_methods(new AdminControllers()));
     }
