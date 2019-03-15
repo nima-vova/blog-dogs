@@ -33,7 +33,7 @@ abstract class AbstractControllers
         $this->loader = new Twig_Loader_Filesystem('./templates/main-page');
         // Instantiate our Twig
         $this->twig = new Twig_Environment($this->loader);
-        //будем використовувати в delete або edit останню частину роута (там повинен бути індекс для редагуання або видалення)
+        // will use in delete or edit the last part of the rout (there should be an index for editing or deleting)
         $this->urlAnalysis = new UrlAnalysis();
         
         $this->testValue = 10;
@@ -59,12 +59,12 @@ abstract class AbstractControllers
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //створюемо тестового користувача для входу в  "petro" адмінку
-            if ($login == "petro") {
-                $token = sha1('test');
-                setcookie('token', $token);
-                header('Location: ' .'/admin');
-            }
+            //create a test user to log in to the "petro" admin
+//            if ($login == "petro") {
+//                $token = sha1('test');
+//                setcookie('token', $token);
+//                header('Location: ' .'/admin');
+//            }
         }
 //        else{
 //            $param = 'not login';

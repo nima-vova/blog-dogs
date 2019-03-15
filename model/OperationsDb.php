@@ -70,7 +70,7 @@ abstract class OperationsDb implements CrudDb
      * @param $param
      * @return null|\stdClass
      */
-    public function selectElement($fieldName, $tableName, $param): \stdClass
+    public function selectElement($fieldName, $tableName, $param): ?\stdClass
     {
         $stmt = $this->db->prepare("SELECT * FROM $tableName WHERE $fieldName = '$param'");
         $stmt->execute();
@@ -87,8 +87,8 @@ abstract class OperationsDb implements CrudDb
      */
     abstract public function updateElement(\stdClass $object);
 
-    // видаляєм елементи по переданому id але лише в тих таблицях де id не є зовнішнім ключем,
-    // або якщо в дочірньої таблиці стоїть cascade
+    // delete the elements on the passed id, but only in those tables where id is not an external key,
+    // or if the child table has a cascade
     /**
      * @param $id
      * @param $tableName
@@ -124,8 +124,8 @@ abstract class OperationsDb implements CrudDb
      */
     public function selectElements($tableName, $fieldsName): array
     {
-        // перетворюємо масив із іменами полів в строку де імена полів
-        // розіделні комою (як в запиті перелічується поля через кому)
+        // make an array with field names in the string where the field names are
+        // commas (as in the query the fields are listed by commas)
         $strFieldsName = join(", ", $fieldsName);
         $stmt = $this->db->prepare("SELECT $strFieldsName FROM $tableName");
         $stmt->execute();

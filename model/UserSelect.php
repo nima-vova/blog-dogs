@@ -72,7 +72,8 @@ class UserSelect extends OperationsDb
            return
                parent::selectElement($this->login, $this->tableName, $param);
        }
-       // для роута редагування або видалення користувача по id в url(без аякса)
+
+    // for rout editing or deleting user by id in url (without ayax)
     /**
      * @param $param
      * @return null|\stdClass
@@ -90,14 +91,14 @@ class UserSelect extends OperationsDb
        public function deleteUser($id): string
        {
 
-           // так як в нас є зовнішні ключі, які звязують користувача з публікаціями,
-           // тому перед тим як видалять користувача ми повинні перевірити чи є в нього публікації
-           //(в звязуючій таблиці publications_users шукаєм кількість користувачів якщо є то видамо повідомлення що не можливо
-           //видалять користувача бо є в нього публікації)
-           // Навідь якщо не робить перевірку, і робить видалення користувача то
-           // видасть помилку "Cannot delete or update a parent row: a foreign key constraint fails"
-           // адже в дочірній таблиці publications_users ти звязку зовнішнього ключа не каскадне видалення,
-           // а restrict
+           // as we have external keys that connect the user with publications,
+           // so before we delete the user, we must check if there are any posts in it
+           // (in the binding table publications_users we are looking for the number of users if there is something we will send a message that is not possible
+           // delete the user because there are posts in it)
+           // Well, if it does not do the check, and does delete the user then
+           // will issue an error "Can not delete or update a parent row: a foreign key constraint file"
+           // in the publications_users subsidiary table, the connection of the external key is not a cascade deletion,
+           // and restrict
            $stmt = $this->db->prepare("SELECT COUNT(*) AS count FROM publications_users WHERE user_id = '$id'");
            //return $stmt->execute();
            $stmt->execute();
@@ -125,10 +126,10 @@ class UserSelect extends OperationsDb
            // $stmt->execute();
            try {
                $stmt->execute();
-               // перевіряєм чи відбулось оновлення запису БД, якщо було то rowCount() =1, інакше =0
+               // check if there was an update to the database record, if it was rowCount () = 1, otherwise = 0
                $countUbdate = $stmt->rowCount();
-               // якщо оновлення відбулось знач вертаємо відповідь 'ok' (цю відповідь потім контролер вертає js
-               // де в скрипту в функції аякса перевіряється цей парамтр (якщо 'ok' то js оноляє строчуку із змінами ні то видає помилку))
+               // if the update occurred, then we return the answer 'ok' (this answer then returns the controller to js
+               // where in the script in the function of Ajax this parameter is checked (if 'ok' then js does not make a line with the changes, then it makes a error))
                if ($countUbdate == 1) {
                    return 'ok';
                } else {

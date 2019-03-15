@@ -23,9 +23,9 @@ class AdminControllers extends AbstractControllers
     public function __construct()
     {
         parent::__construct();
-        // створуєм twigAdmin (для адмінки інший шлях для збереження шаблонів), бо під назвою
-        // twig будуть визиватись Action з базового контролера які виводять сторінки з помилками)
-        // Тому щоб не переоприділить twig предка ми створємо під новоою назвою twigAdmin
+        // create twigAdmin (for admin is another way to save templates), because under the name
+        // twig will be called Action from the base controller that output the error pages)
+        // Therefore, in order not to redefine the twig parent we create under the new name twigAdmin
         $this->loaderAdmin = new Twig_Loader_Filesystem('./templates/admin');
         // Instantiate our Twig
         $this->twigAdmin = new Twig_Environment($this->loaderAdmin);
@@ -38,8 +38,8 @@ class AdminControllers extends AbstractControllers
      */
     public function indexAction()
     {
-        // перевіряєм чи аутентифікований користувач ( за допомогою сервіса де по токену індинтифікуєтся користувач)
-        // якщо не прошла аунтифікація (не правильний токен, чи взагалі відсутній), то відправляєм на сторінку авторизації
+        // interpret user authentications (for the service provided by the token authentication user)
+        // allegedly did not pass authentication (not correct token, or absent token), t sends the login page
         if ($this->accsessControl->checkToken()) {
             $user = $this->accsessControl->checkToken();            //var_dump($user);
             echo $this->twigAdmin->render('main-page-admin.html', array('menu' => $user->first_name));
@@ -49,7 +49,7 @@ class AdminControllers extends AbstractControllers
     }
 
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //це тестовий контролер
+    //this is a test controller
 
     /**
      * @return void
@@ -80,8 +80,8 @@ class AdminControllers extends AbstractControllers
      */
     public function showUsersAction()
     {
-        // перевіряєм чи аутентифікований користувач ( за допомогою сервіса де по токену індинтифікуєтся користувач)
-        // якщо не прошла аунтифікація (не правильний токен, чи взагалі відсутній), то відправляєм на сторінку авторизації
+        // check whether the authenticated user (using the service where the user is indexed by this token)
+        // if there is no authentication (not a valid token, or not at all), then we send it to the authorization page.
         if ($this->accsessControl->checkToken()) {
             $user = $this->accsessControl->checkToken();
         } else {
@@ -108,28 +108,28 @@ class AdminControllers extends AbstractControllers
      */
     public function editUsersAction()
     {
-        // перевіряєм чи аутентифікований користувач ( за допомогою сервіса де по токену індинтифікуєтся користувач)
-        // якщо не прошла аунтифікація (не правильний токен, чи взагалі відсутній), то відправляєм на сторінку авторизації
+        // check whether the authenticated user (using the service where the user is indexed by this token)
+        // if there is no authentication (not a valid token, or not at all), then we send it to the authorization page.
         if ($this->accsessControl->checkToken()) {
             $user = $this->accsessControl->checkToken();
         } else {
             return header('Location: ' .'/login');
         }
 
-        //якщо це аякс (тобто був переданий параметр в запиті- обект з полями для зміни в бд),
-        // значить відправляємо дані з запиту на оновлення запису в бд,
+        // if this is ajax (i.e., the parameter was passed to the query-the object with the fields to change in bd),
+        // therefore, we send data from the request to update the record in the bd
         if (isset($_POST) && (!empty($_POST))) {
             $jsonString = json_encode($_POST);
             $newObject = json_decode($jsonString);
             $resultUpdate = $this->usersSelect->updateElement($newObject);
             echo $resultUpdate;
         } else {
-            // інакше - знач роут без аякса, тому спочатку перевіряєм чи існує в кінці url іd цілочисельний
-            // і підходить критеріям (в сервісі urlAnalysis->defineIndexinUrl()).
-            // Потім перевіряєм чи є в базі користувач з таким id,
-            // якщо все вірно то виводим всих користувачів (все як в роуті users/show)
-            // і відправляєм додатково параметр із значенням id користувача для того,
-            // щоб js міг цього користувача вивести в полях форми для редагування
+            // else - meaning rout without ayax, so first check whether there is an end of url and integer
+            // and meets the criteria (in the service urlAnalysis->defineIndexinUrl()).
+            // Then check if there is a user with such id,
+            // if everything is correct, we output all users (all as in the rows users/show)
+            // and send an optional parameter with the user id value to
+            // so that js could display this user in the form fields for editing
             $defineIndexinUrl = $this->urlAnalysis->defineIndexinUrl();
             if ($defineIndexinUrl) {
                 $getUserById = $this->usersSelect->getUserById($defineIndexinUrl);
@@ -146,14 +146,14 @@ class AdminControllers extends AbstractControllers
         //echo $this->twigAdmin->render('main-page-admin.html', array('param' => json_encode($allUsers), 'menu'=>'users-show'));
     }
 
-    // видалення робем тільки через ajax
+    // delete work only through ajax
     /**
      * @return void
      */
     public function deleteUsersAction(): void
     {
-        //якщо це аякс (тобто був переданий параметр в запиті- обект з полями для зміни в бд),
-        // значить відправляємо дані з запиту на видалення запису в бд,
+        // if this is ajax (i.e., the parameter was passed to the query-the object with the fields to change in bd),
+        // then we send the data on the request to delete the record in the bd
         if (isset($_POST) && (!empty($_POST))) {
             $jsonString = json_encode($_POST);
             $newObject = json_decode($jsonString);
@@ -169,8 +169,8 @@ class AdminControllers extends AbstractControllers
      */
     public function showPublicationsAction()
     {
-        // перевіряєм чи аутентифікований користувач ( за допомогою сервіса де по токену індинтифікуєтся користувач)
-        // якщо не прошла аунтифікація (не правильний токен, чи взагалі відсутній), то відправляєм на сторінку авторизації
+        // check whether the authenticated user (using the service where the user is indexed by this token)
+        // if there is no authentication (not a valid token, or not at all), then we send it to the authorization page.
         if ($this->accsessControl->checkToken()) {
             $user = $this->accsessControl->checkToken();
         } else {
@@ -199,15 +199,15 @@ class AdminControllers extends AbstractControllers
      */
     public function editPublicationsAction()
     {
-        // перевіряєм чи аутентифікований користувач ( за допомогою сервіса де по токену індинтифікуєтся користувач)
-        // якщо не прошла аунтифікація (не правильний токен, чи взагалі відсутній), то відправляєм на сторінку авторизації
+        // check whether the authenticated user (using the service where the user is indexed by this token)
+        // if there is no authentication (not a valid token, or not at all), then we send it to the authorization page.
         if ($this->accsessControl->checkToken()) {
             $user = $this->accsessControl->checkToken();
         } else {
             return header('Location: ' .'/login');
         }
-        //якщо це аякс (тобто був переданий параметр в запиті- обект з полями для зміни в бд),
-        // значить відправляємо дані з запиту на оновлення запису в бд,
+        // if this is ajax (i.e., the parameter was passed to the query-the object with the fields to change in bd),
+        // then we send the data on the request to delete the record in the bd
         if (isset($_POST) && (!empty($_POST))) {
             $jsonString = json_encode($_POST);
             $newObject = json_decode($jsonString);
@@ -215,12 +215,12 @@ class AdminControllers extends AbstractControllers
             $resultUpdate = $this->publicationsSelect->updateElement($newObject);
             echo $resultUpdate;
         } else {
-            // інакше - знач роут без аякса, тому спочатку перевіряєм чи існує в кінці url іd цілочисельний
-            // і підходить критеріям (в сервісі urlAnalysis->defineIndexinUrl()).
-            // Потім перевіряєм чи є в базі користувач з таким id,
-            // якщо все вірно то виводим всих користувачів (все як в роуті users/show)
-            // і відправляєм додатково параметр із значенням id користувача для того,
-            // щоб js міг цього користувача вивести в полях форми для редагування
+            // else - meaning rout without ayax, so first check whether there is an end of url and integer
+            // and meets the criteria (in the service urlAnalysis->defineIndexinUrl()).
+            // Then check if there is a user with such id,
+            // if everything is correct, we output all users (all as in the rows users/show)
+            // and send an optional parameter with the user id value to
+            // so that js could display this user in the form fields for editing
             $defineIndexinUrl = $this->urlAnalysis->defineIndexinUrl();
             if ($defineIndexinUrl) {
                 $getPublicationById = $this->publicationsSelect->getPublicationById($defineIndexinUrl);
@@ -237,14 +237,14 @@ class AdminControllers extends AbstractControllers
         //echo $this->twigAdmin->render('main-page-admin.html', array('param' => json_encode($allUsers), 'menu'=>'users-show'));
     }
 
-    // видалення робем тільки через ajax
+    // delete work only through ajax
     /**
      * @return void
      */
     public function deletePublicationsAction(): void
     {
-        //якщо це аякс (тобто був переданий параметр в запиті- обект з полями для зміни в бд),
-        // значить відправляємо дані з запиту на видалення запису в бд,
+        // if this is ajax (i.e., the parameter was passed to the query-the object with the fields to change in bd),
+       // then we send the data on the request to delete the record in the bd
         if (isset($_POST) && (!empty($_POST))) {
             $jsonString = json_encode($_POST);
             $newObject = json_decode($jsonString);
@@ -260,8 +260,8 @@ class AdminControllers extends AbstractControllers
      */
     public function showTagsAction()
     {
-        // перевіряєм чи аутентифікований користувач ( за допомогою сервіса де по токену індинтифікуєтся користувач)
-        // якщо не прошла аунтифікація (не правильний токен, чи взагалі відсутній), то відправляєм на сторінку авторизації
+        // check whether the authenticated user (using the service where the user is indexed by this token)
+        // if there is no authentication (not a valid token, or not at all), then we send it to the authorization page.
         if ($this->accsessControl->checkToken()) {
             $user = $this->accsessControl->checkToken();
         } else {
@@ -286,16 +286,15 @@ class AdminControllers extends AbstractControllers
      */
     public function editTagsAction()
     {
-        // перевіряєм чи аутентифікований користувач ( за допомогою сервіса де по токену індинтифікуєтся користувач)
-        // якщо не прошла аунтифікація (не правильний токен, чи взагалі відсутній), то відправляєм на сторінку авторизації
+        // check whether the authenticated user (using the service where the user is indexed by this token)
+        // if there is no authentication (not a valid token, or not at all), then we send it to the authorization page.
         if ($this->accsessControl->checkToken()) {
             $user = $this->accsessControl->checkToken();
         } else {
             return header('Location: ' .'/login');
         }
-        //якщо це аякс (тобто був переданий параметр в запиті- обект з полями для зміни в бд),
-        // значить відправляємо дані з запиту на оновлення запису в бд,
-
+        // if this is ajax (i.e., the parameter was passed to the query-the object with the fields to change in bd),
+        // then we send the data on the request to delete the record in the bd
         if (isset($_POST) && (!empty($_POST))) {
             $jsonString = json_encode($_POST);
             $newObject = json_decode($jsonString);
@@ -303,12 +302,12 @@ class AdminControllers extends AbstractControllers
             $resultUpdate = $this->tagsSelect->updateElement($newObject);
             echo $resultUpdate;
         } else {
-            // інакше - знач роут без аякса, тому спочатку перевіряєм чи існує в кінці url іd цілочисельний
-            // і підходить критеріям (в сервісі urlAnalysis->defineIndexinUrl()).
-            // Потім перевіряєм чи є в базі користувач з таким id,
-            // якщо все вірно то виводим всих користувачів (все як в роуті users/show)
-            // і відправляєм додатково параметр із значенням id користувача для того,
-            // щоб js міг цього користувача вивести в полях форми для редагування
+            // else - meaning rout without ayax, so first check whether there is an end of url and integer
+            // and meets the criteria (in the service urlAnalysis->defineIndexinUrl()).
+            // Then check if there is a user with such id,
+            // if everything is correct, we output all users (all as in the rows users/show)
+            // and send an optional parameter with the user id value to
+            // so that js could display this user in the form fields for editing
             $defineIndexinUrl = $this->urlAnalysis->defineIndexinUrl();
             if ($defineIndexinUrl) {
                 $getTagById = $this->tagsSelect->getTagById($defineIndexinUrl);
@@ -325,14 +324,14 @@ class AdminControllers extends AbstractControllers
         //echo $this->twigAdmin->render('main-page-admin.html', array('param' => json_encode($allUsers), 'menu'=>'users-show'));
     }
     
-    // видалення робем тільки через ajax
+    // delete work only through ajax
     /**
      * @return void
      */
     public function deleteTagsAction(): void
     {
-        //якщо це аякс (тобто був переданий параметр в запиті- обект з полями для зміни в бд),
-        // значить відправляємо дані з запиту на видалення запису в бд,
+        // if this is ajax (i.e., the parameter was passed to the query-the object with the fields to change in bd),
+        // then we send the data on the request to delete the record in the bd
         if (isset($_POST) && (!empty($_POST))) {
             $jsonString = json_encode($_POST);
             $newObject = json_decode($jsonString);

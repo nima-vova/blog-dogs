@@ -22,22 +22,22 @@
             $("#publications-show").navigation();
             $("#tags-show").navigation();
 
-            // обробляєм подію через делегування -так як кнопочки по видаленню і редагуванню виведених даних
-            // були створені динамічно і тому звичайним шляхом почепить оброботчик на них не вийде,
-            // тому оброботчик вішаєм на блищого предка елемента який був створений не динамічно
-            // (можна і на body але більш доцільніше на блищого предка чіпляти),
-            // а потім в в фунції crudAdmin- вішаєм подію натискання миші і делагуємо цю подію на потомка
-            // створеного динамічно (this.on("click", ".edit-row", function (){...})
-            // також в середені оброботчика this є сам цей потомок якому делегували подію
+            // process the event via delegation-like buttons for deleting and editing output data
+            // have been created dynamically and therefore, the usual way to hurt the worker on them will not work out,
+            // so the worker hangs on the glittering ancestor of an element that was not created dynamically
+            // (it is possible on the body, but it is more expedient to cling to the bright parent),
+            // and then in the crudAdmin function, hang the mouse click event and we make this event to the descendant
+            // created dynamically (this.on ("click", ".edit-row", function () {...})
+            // also in the middle of the processor this is the very descendant whom the delegate delegated to the event
             $(".content").crudAdmin();
 
         });
     </script>
-    {# defined - перевіряє, чи визначена змінна  param
-       якщо так, то це значить не аякс і виводем весь список сучності,
-       потім перевіряєм якшо є id і вказана дія (action == 'edit'),
-       то визиваєм $(document).crudAdmin('{{id}}') (передавши параметр id елемента для обробки).
-       Якщо немає param, то просто виводем шаблон
+    {# defined - checks whether a param variable is specified
+            if so, then it means not Ajax and we deduce the entire list of entity,
+            then check if id is the specified action (action == 'edit')
+            then we call $ (document) .crudAdmin ('{{id}}') (passing the id parameter of the element for processing).
+            If there is no param, we simply output the template
     #}
     {% if param is defined %}
     {# do something #}

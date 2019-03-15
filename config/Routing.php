@@ -14,8 +14,8 @@ use Controllers\AdminControllers;
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// нада не забути унеможливить в назвах url великі букви (бо щас считується що Users шо users,
-// а потрібно щоб було тільки user)
+// do not forget to disable the uppercase letters in the url names (because now reads that Users are users,
+// you only need to be a user)
 class Routing
 {
     /**
@@ -25,16 +25,16 @@ class Routing
     {
         $this->controllers = new Controllers();
         $this->adminControllers = new AdminControllers();
-        // Разділяємо наш запит на частинки
+        // divide the request for particle
         $this->routs = explode('/', $_SERVER['REQUEST_URI']);
         //var_dump($this->routs);
         //var_dump(get_class_methods(new AdminControllers()));
     }
 
-    // по першій частині роута (тобто розділення по "/") визначаємо якого типу нам контролери шукать
-    // (якщо це admin- то шукаємо контролер (за допомогою getNameController) в AdminControllers,
-    // якщо пусто це головна сторіка і ми визиваємо Controllers->indexAction),
-    // якщо інще (default) то шукаємо в Сontrollers (за допомогою getNameController)
+//     on the first part of the route (search on "/") by the type of controllers
+//      (as admin, the controller's post (after getNameController) in AdminControllers,
+//      as empty as the headboard with the Controllers-> indexAction),
+//     else (default) then search in Controllers (for getNameController)
     /**
      * @return void
      */
@@ -50,8 +50,8 @@ class Routing
                 
                 break;
             case "admin":
-                // якщо в роуті з адмінкою є ще елементи то шукаємо який action,
-                // якщо ні то це значить, що це головна сторінка адмінки indexAction()                
+                // if in the routine with the admin there are still elements then we are looking for what action,
+                // if it does not mean that this is the main page of the indexAction () admin
                 if (isset($routs[2])) {
                     $nameAction = $this->getNameController($routs, $this->adminControllers);
                     $this->adminControllers->$nameAction();
@@ -67,18 +67,17 @@ class Routing
                 }
                 break;
             default:
-//             //так як роут той що не адмінка буде на один елемент масиву менший, то ми йому
-                // в початок масива добавляємо пустий елемент перед тим як передавать його в getNameController
-                // (тому що, getNameController розбірає масив роута з 2 і 3 індекса,  а в звичайному роуті той що не адмінка
-                // 2 індекс останній, так ми уніфіціруєм масив для getNameController)
+                // as the rout of the one that does not admink will be on one element of the array smaller, then we are to him
+                // at the beginning of the array we add an empty element before passing it to the getNameController
+                // (because getNameController crawls the rows with 2 and 3 indexes, and in the usual rout one that does not admink
+                // 2 is the last index, so we unify the array for getNameController)
                 array_unshift($routs, "");
                 $nameAction = $this->getNameController($routs, $this->controllers);
                 $this->controllers->$nameAction();
         }
     }
-
-    //по часткам роута (тобто розділення по "/") визначаємо контролер який обробляє цей роут
-    // Вертаємо контролер або просто false, якщо контролера не знайдено
+//     by rotact particle (division by "/") determine the controller that handles this rout
+//     Return the controller or just false if the controller is not found
     /**
      * @param $names
      * @param $controller
@@ -86,36 +85,36 @@ class Routing
      */
     public function getNameController(array $names, AbstractControllers $controller): string
     {
-        //розбиваєм всі методи контролера на масив (елементи якого назви методів контролера)
+        // split all methods of the controller into an array (elements of which are the names of controller methods)
         $methods = get_class_methods($controller);
         //var_dump($methods);
         if (isset($names[2])&& isset($names[3])) {
-            // перетворємо першу букву в заглавну
+            // we convert the first letter to the capital
             $names[2] = ucwords($names[2]);
             //$names[3] = ucwords($names[3]);
             for ($i = 0; $i<count($methods); $i++) {
-                // розбиваєм назву метода контролера на слова по Заглавній букві
+                // split the name of the controller method into words by the capital letter
                 $subMethods = preg_split('/(?=[A-Z])/', $methods[$i]);
                 // var_dump($subMethods);
-                // це масив який міститиме назву сучності і дію контролера (два елементи)
+                // is an array containing the name of the entity and the controller's action (two elements)
                 $returnSubMethods = [];
                 for ($j = 0; $j<count($subMethods); $j++) {
-                    // якщо в назві метода є перша частина з роута, то записуєм в
-                    // в масив $returnSubMethods[0] імя частини метода (це буде дія яку робить контролер)
+                    // if in the name of the method there is the first part of the rout, then write in
+                    // in the $returnSubMethods[0] array is the name of the part of the method (this will be the action the controller does)
                     if (strcmp($subMethods[$j], $names[2]) == 0) {
                         $returnSubMethods[0] = $subMethods[$j];
                         //continue 1;
                         continue;
                         //break 2;
                     }
-                    // якщо в назві метода є друга частина з роута, то записуєм в
-                    // в масив $returnSubMethods[1] імя частини метода (це буде імя сучності в контролері)
+                    // if the method name has the second part of the rout, then write to
+                    // in the $returnSubMethods[1] array the name of the part of the method (this will be the name of the entity in the controller)
                     if (strcmp($subMethods[$j], $names[3]) == 0) {
                         $returnSubMethods[1] = $subMethods[$j];
                     }
                 }
-                //якщо після перебору частин імені метода контролера ми знайшли всі 2
-                //  то вертаємо результуючий масив і виходиим з цикла
+                // if after having searched parts of the name of the method of the controller, we found all 2
+                // then return the resulting array and exit from the cycle
                 if (count($returnSubMethods) == 2) {
                     // var_dump($returnSubMethods);
                     // var_dump(count($returnSubMethods));
@@ -123,7 +122,7 @@ class Routing
                     return $methods[$i];
                 }
             }
-            // якщо назва контролера не знайдена, значить виртаєм назву контролера який виводить помилку
+            // if the name of the controller is not found, then the name of the controller is displayed, which displays an error
             return 'notFoundAction';
         }
         return 'notFoundAction';

@@ -50,49 +50,51 @@ class Controllers extends AbstractControllers
      */
     public function showPublicationsById(): void
     {
-        // перевіряєм чи існує в кінці url іd цілочисельний
-        // і підходить критеріям (в сервісі urlAnalysis->defineIndexinUrl()).
+        // check whether the end of the url is integer id
+        // and meets the criteria (in the service urlAnalysis->defineIndexinUrl()).
         $defineIndexinUrl = $this->urlAnalysis->defineIndexinUrl();
         if ($defineIndexinUrl) {
-            // запит до бази - вибірка публікації по id
+            // request to the database - the sample of publication by id
             $publication = $this->publicationsSelect->getPublicationById($defineIndexinUrl);
             if ($publication) {
-                // запит до бази - вибірка назв тегів які відносяться до вибраної публікації
+                // request to the database - a selection of tag names related to the selected publication
                 $getTagsNamesByIdPublication = $this->publicationsSelect->getTagsNamesByIdPublication($defineIndexinUrl);
-                // додається до обекта публікація (властивостями якого є поля з таблиці із значеннями)
-                // властивість ->tags(де міститься масив значень імен тегів, які відносятья до цієї публікації())
+                // the publication is added to the object (the properties of which are fields from the table with values)
+                // property -> tag (which contains an array of values of tag names that refer to this post ())
                 $publication->tags = $getTagsNamesByIdPublication;
-                // перевіряєтья з відки прийшов запит. якщо ajax, то передаєм публікацію знайдену по id
-                //(в js функції ajax яка визвала цей роут), або повідомлення що не знайшлась публікація
+                // checked out the request from the checkout. if ajax, then pass the publication found by id
+                // (in js the ajax function that triggered this rout) or a message that was not published
                 if (isset($_POST['object-show']) && $_POST['object-show'] == "ajax") {
                     //var_dump($publications);
                     header('Content-type: application/json');
                     echo json_encode($publication);
-                } // якщо не аякс то передаєм в twig публікацію знайдену по id, назву меню (роут) до якого відносяться дані для виведення
+                }
+                // if not ayax then you pass in the twig publication found by id, the menu name (rout) to which the data refer to the output
                 else {
                     echo $this->twig->render('main-page.html', array('menu' => 'publications-show-' . $publication->id, 'data' => json_encode($publication)));
                 }
             }
             else {
-                // url іd не ічнує(не ма публікації по цьому id),
-                // виводидим що сторінка не існує
+                // url ıd does not exist (there is no post on this id),
+                // display that the page does not exist
                 $this->notFoundAction();
             }
         }
-        // url іd не підходить критеріям (в сервісі urlAnalysis->defineIndexinUrl()),
-        // виводидим що сторінка не існує
+        // url id does not fit the criteria (in the service url Analysis->defineIndexinUrl()),
+        // deducing that the page does not exist
         else {
             $this->notFoundAction();
         }
     }
-    // для роута, який виводить публікації по вибраному тегу
+
+    // for a rout that displays posts for the selected tag
     /**
      * @return void
      */
     public function showTags(): void
     {
         //var_dump($_POST);
-        // вибирається з url назва тега
+        // is selected from the url tag name
         $tagName = $this->urlAnalysis->lastElemUrl;
         //var_dump($tagName);
         $getPublicationsByTagName = $this->publicationsSelect->getPublicationsByTagName($tagName);
@@ -112,7 +114,7 @@ class Controllers extends AbstractControllers
     {
         $loadData = $this->loadDate->testLoadData();
 
-        // не видалять
+        // do not delete
         //echo $this->twig->render('main-page-admin.html', array('menu' => $loadData,));
         echo $this->twig->render('main-page.html', array('menu' => $loadData,));
     }

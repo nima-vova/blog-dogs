@@ -52,8 +52,8 @@
 		//console.log(param);
 
 		$.each(param, function(key, val){
-			// вставляєм cтроку таблиці додаючи їй клас show-element і клас значення id
-			// (по назві класу із значенням id буде шукатись строка для редагування, коли запит без аякса)
+			// insert a table string by adding a show-element class to it and a value class id
+            // (the name of the class with the value of id will be searched for a line to edit when the request without ajax)
 			$('table.show-element > tbody:last-child').append(
 				"<tr class='show-element "+val.id+"'></tr>");
 
@@ -75,18 +75,10 @@
 		};
 
 		this.click(function() {
-			// замінюємо всі "-" на "/" (так формуємо частину url яку будем додавати до основної)
+			// replace all "-" with "/" (so we create the part of url which we will add to the main) ajax)
 			var pathUrl = this.id.replace(/-/g,"/");
             var thas =this;
 			$.ajax({
-				// все добре, проблемо була що не туди відпавляв в аяксі
-				// було і url: 'index.php', i url: 'test.php', а так як в нас автоматов
-				// роутінг підключений тому нада вказать роут  в url: '//blog-dogs.com/admin/users-show'
-				// який розбере роутінг і визве чи контролер чи просто тестово echo якесь значення
-				// !!!!!!!!!!!! проблема тепер як мінятть url в document.location = "//blog-dogs.com/admin/users-show"
-				// адже тепер коли міняєм то автоматом роутінг спрацьовує, а нам нада щоб він тільки аяксом спацював,
-				// а потім не реагував коли ми міняєм url
-
 				url: '//blog-dogs.com/admin/'+pathUrl,
 				//url: '//blog-dogs.com/admin/users/show',
 				type: 'post',
@@ -95,14 +87,14 @@
 				data: { "object-show": "ajax"},
 				//data: { "users-show": "ajax"},
 				success: function(response){
-					// window.history.pushState - html5 для реализации смена URL без перезагрузки страницы
-					// и добавляет запись в историю браузера (тобто спрацьовує кнопа "назад")
+					// window.history.pushState - html5 to implement a change of URL without reloading the page
+					// and adds an entry to the browser history (the "back" button works)
 					window.history.pushState("null", "null", "//blog-dogs.com/admin/"+pathUrl);
 					//window.history.pushState("null", "null", "//blog-dogs.com/admin/users/show");
 					
 					tesShow(response, thas.id);
 				},
-				// так проще по виду помилки взнати чому не працює ajax
+				// so more convenient in the form of errors to find out why does not work ajax
 				error: function (jqXHR, exception) {
 					var msg = '';
 					if (jqXHR.status === 0) {
@@ -125,13 +117,5 @@
 				}
 			});
 		});
-
-
-
-
-
 	};
-
-
-
 })(jQuery);

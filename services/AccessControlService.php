@@ -39,7 +39,7 @@ class AccessControlService
             $user = new UserSelect();
             $user = $user->getUserByToken($this->token);
             //var_dump($user);
-            //не видалять це потрібно!!!!!!!!!!!!!!!!!!!!!!!!!1
+            //do not delete it you need !!!!!!!!!!!!!!!!!!!!!!!!!
             //if(!empty($user)&& ($user[0]['user_agent']==$this->userAgent)){
             if (is_null($user)) {
                 return null;

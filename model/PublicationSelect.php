@@ -56,7 +56,7 @@ class PublicationSelect extends OperationsDb
             parent::selectElements($this->tableName, $this->filedsNmae);
     }
 
-    // для роута редагування або видалення публікації по id в url(без аякса)
+    // for rout editing or deleting post via id in url (without ayax)
     /**
      * @param $param
      * @return null|\stdClass
@@ -75,7 +75,7 @@ class PublicationSelect extends OperationsDb
     public function updateElement(\stdClass $object): string
     {
 
-        // використовуєм quote для екранірування даних (наприклад апострофи' і тому подібне)
+        // use quote for data screening (such as apostrophes and the like)
         $stmt = $this->db->prepare("UPDATE $this->tableName set name = " . $this->db->quote($object->name) .", 
                full_text =" . $this->db->quote($object->full_text) ." , 
                dt_of_pub =" . $this->db->quote($object->dt_of_pub).", 
@@ -84,10 +84,10 @@ class PublicationSelect extends OperationsDb
         //$stmt->execute();
         try {
             $stmt->execute();
-            // перевіряєм чи відбулось оновлення запису БД, якщо було то rowCount() =1, інакше =0
+            // check if there was an update to the database record, if it was rowCount () = 1, otherwise = 0
             $countUbdate = $stmt->rowCount();
-            // якщо оновлення відбулось знач вертаємо відповідь 'ok' (цю відповідь потім контролер вертає js
-            // де в скрипту в функції аякса перевіряється цей парамтр (якщо 'ok' то js оноляє строчуку із змінами ні то видає помилку))
+            // if the update occurred, then we return the answer 'ok' (this answer then returns the controller to js
+            // where in the script in the function of ayax this parameter is checked (if 'ok' then js does not make a line with changes, then it issues an error))
             if ($countUbdate == 1) {
                 return 'ok';
             } else {
@@ -98,8 +98,9 @@ class PublicationSelect extends OperationsDb
             //return 'not updated';
         }
     }
-    // вибірка масива імен тегів, які відносяться до публікації заданої по id
-    // (вибірка робиться за допомогою звязуючої таблиці  tags_publications між тегами і публікаціямми)
+
+   // sample the array of name tags that refer to the publication specified by id
+   // (sampling is done using the tag_publications link table between tags and posts)
     /**
      * @param $id
      * @return array
@@ -109,14 +110,14 @@ class PublicationSelect extends OperationsDb
         $stmt = $this->db->prepare("SELECT t.name FROM tags t, 
             tags_publications t_p WHERE t.id = t_p.tag_id AND t_p.publication_id = $id ");
         $stmt->execute();
-        // PDO::FETCH_COLUMN, 0 масив-вибірка всіх значень першого стовпчика (в нас один стопчик name,
-        // тому будуть виводитись коротко тільки його значення "0 => 'value'" ....)
+        // PDO :: FETCH_COLUMN, 0 array-selection of all values of the first column (we have one stop name,
+        // will therefore only briefly display its value "0 => 'value'" ....)
         return $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
     }
 
-    // вибірка публікацій які відностяь до тега який передається параметром (назва тега)
-    // (вибірка робиться за допомогою звязуючої таблиці  tags_publications між тегами і публікаціямми)
-    // використовуєм quote для екранірування даних (наприклад апострофи' і тому подібне)
+    // the selection of publications related to the tag transmitted by the parameter (name of the tag)
+    // (sampling is done using the tag_publications link table between tags and posts)
+    // use quote for data screening (such as apostrophes and the like)
     /**
      * @param string $tagName
      * @return array

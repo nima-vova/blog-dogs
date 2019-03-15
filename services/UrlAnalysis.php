@@ -19,21 +19,21 @@ class UrlAnalysis
      */
     public function __construct()
     {
-        //розбиваєм url на масив
+        //split url into array
         $arrUrl= explode('/', $_SERVER['REQUEST_URI']);
-        // берем оствнній елемент масива
+        // take the last element of the array
         $this->lastElemUrl = array_pop($arrUrl);
     }
 
-    //визначаємо в url в остальній частині( тещо після остльного /) індекс сучності над якою будуть робиться дії
-    // (видалення або редагування)
+    // define in the url in the rest of the (that is, after the last /) index of the entity over which actions will be taken
+    // (delete or edit)
     /**
      * @return bool|self
      */
     public function defineIndexinUrl()
     {
-        //якщо елемент строки є цілим числом позитивним, і не начинаєтться з 0, то вертаєм його, інакше вертаєм false
-        // (адже індекси в базі не бувають 0 або 01 чи 0001)
+        // if the element of a line is an integer positive, and does not start with 0, then return it, else return false
+        // (because the indexes in the database are not 0 or 01 or 0001)
         if (preg_match("/^[1-9]\d*$/", $this->lastElemUrl)) {
             return $this->lastElemUrl;
         } else {
@@ -41,8 +41,8 @@ class UrlAnalysis
         }
     }
 
-    //вивід останньої частини(те що після останнього "/") url(без перевірки її чи це число чи текст, наприклад
-    // буде використовуватись для визначення імені тегу)
+     // output the last part (that is, after the last "/") url (without checking it is either a number or a text, for example
+    // will be used to determine the name of the tag)
     /**
      * @return self
      */

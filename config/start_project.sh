@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "Подождите.Идёт создания файла"
+#echo "Подождите.Идёт создания файла"
 #cat -n  >db_info.txt <<- 'EOF'
 echo -n "What's your host name: "
 read hostname

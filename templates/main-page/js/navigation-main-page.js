@@ -1,8 +1,8 @@
 /**
  * Created by nima on 08.11.18.
  */
-// по параметру menu опреділяється обект який буде виводиться,
-//і визивається відповідна функція яка буде оброблять і виводить переданий обект
+// the menu option is divided by the object that will be displayed,
+// and called the corresponding function that will process and output the transmitted object
 var detectMenu = function (data, menu){
 	switch (menu) {
 		case 'main-page':
@@ -16,33 +16,24 @@ var detectMenu = function (data, menu){
 			break;
 		//case 'publications-show-id':
 		default:
-			// якщо це підстрока'publications-show-'
-			// то визивається вивід однієї публікації по id( адже ід можить бути різним значенням,
-			// тому шукається функція для обробки без id в строкі)
+			// if this is the substring 'publications-show-'
+            // then the output of one publication is called (because the i can be different value,
+            // therefore the function for processing without id in the string is searched)
 			if (menu.indexOf('publications-show-')!=-1){
 			    return showPublicationById(data);
 				//return console.log(menu);
 			    break;
 			}
-			// якщо це підстрока'tags-show-'
-			// то визивається вивід всіх публікацій по назві тега( адже tag-імя тега можить бути різним значенням,
-			// тому шукається функція для обробки без tag-імя в строкі url)
+			// if it is a substring 'tag-show-'
+            // then the output of all the publications is called under the title of the tag (because the tag-name tag can be different value,
+            // therefore the function for processing without a tag-name is searched in the lines of url)
 			if (menu.indexOf('tags-show-')!=-1){
-
-
-				////////////////////////////////////////
-				////////////////////////////////////////
-				////////////////////////////////////////
-				// !!!!!!!!! ЧОГОСЬ ОЦЕЙ tags/show/bull%20terrier НІЧОГО НЕ ВИВОДИТЬ НАДА РОЗІБРАТИСЬ
-				//// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 				return showMainPage(data);
 				//return console.log(menu);
 				break;
 			}
 	};
 };
-
 var showMainPage = function (data) {
 	//console.log(data);
 	$("div.content").empty();
@@ -68,15 +59,14 @@ var showPublicationById = function (data) {
 			    "<span class='span-tags' id='tags-show-"+val+"'>" +val+"</span>");
 	    });
      };
-
 var sendAjax = function (thas) {
-	// якщо це посилання на головну сторінку,
-	// значить до имені хоста добавиться частина пустого url
+	// if this is a link to the main page,
+    // means that the empty url is added to the hostname
 	if (thas.id == "main-page") {
 		var pathUrl = "";
 	}
 	else {
-		// замінюємо всі "-" на "/" (так формуємо частину url яку будем додавати до основної)
+		// replace all "-" with "/" (so we create the part of url which we will add to the main one)
 		var pathUrl = thas.id.replace(/-/g, "/");
 	}
 	$.ajax({
@@ -88,12 +78,12 @@ var sendAjax = function (thas) {
 		data: {"object-show": "ajax"},
 		//data: { "users-show": "ajax"},
 		success: function (response) {
-			// window.history.pushState - html5 для реализации смена URL без перезагрузки страницы
-			// и добавляет запись в историю браузера (тобто спрацьовує кнопа "назад")
+			// window.history.pushState - html5 to implement a URL change without reloading the page
+            // and adds a record to the browser history (that is, the "back" button triggered)
 			window.history.pushState("null", "null", "//blog-dogs.com/" + pathUrl);
 			detectMenu(response, thas.id);
 		},
-		// так проще по виду помилки взнати чому не працює ajax
+		// so much easier to see why it does not work ajax
 		error: function (jqXHR, exception) {
 			var msg = '';
 			if (jqXHR.status === 0) {
@@ -118,28 +108,30 @@ var sendAjax = function (thas) {
 };
 (function($) {
 	$.fn.navigationMainPage = function (data, menu) {
-		// якщо не аякс (значить в параметрах функції передається назва меню і дані для виведення від сервера
-		// тому визиваєм функцію яка по параметру меню індитифікує яке меню виводить)
+		// if not ajax (meaning in the parameters of the function the name of the menu
+		// is transmitted and the data to be output from the server
+        // so we call the function which by the parameter of the menu affects the menu output)
 		if (menu) {
 			return detectMenu(data, menu);
 		};
 		///////////////////////////////////
-		// якщо це аякс то в ньому також нада буде використовувать функції showMainPage і тд
-		// для елементів з меню(".menu-link") вішаєм відповіднй оброотчик події, виясняєм по ід який і робем відповідний ajax
+		// if it is ajax then in it also will use functions showMainPage and so on
+        // for items from the menu (". menu-link") hang the corresponding event item,
+		// explain what and make the corresponding ajax
 		$(".menu-link").click(function () {
 			//alert(pathUrl);
 			sendAjax(this);
 		    }
 		);
-		 // якщо це аякс то в ньому також нада буде використовувать функції showMainPage і тд
-		 // якщо елемент був натиснутий в контетні значить нам нада вивести його повністю
-		 // але звичайним шляхом обработчик не получится почипить (адже елементи які натискаються,
-		// були стоворені динамічно)тільки через делегування,
-		 // тому оброботчик вішаєм на блищого предка(".content") елемента який був створений не динамічно
-		 // (можна і на body але більш доцільніше на блищого предка чіпляти),
-		 // а потім в вішаєм подію натискання миші і делагуємо цю подію на потомка
-		// створеного динамічно ($(".content").on("click", ".show-element",, function (){...})
-		// також в середені оброботчика this є сам цей потомок якому делегували подію
+		// if it is ajax then in it also will use functions showMainPage and so on
+        // if the element was pressed in the concatenation then we need to print it out completely
+        // but in the normal way the handler can not be tweaked (because the elements are pressed,
+        // were spoken dynamically) only through delegation,
+        // so the worker hangs on the close parent (". content") of the element that was created not dynamically
+        // (it is possible on the body, but it is more expedient to cling to the bright ancestor),
+        // and then in the hanging event of the mouse click and we make this event on the descendant
+        // created dynamically ($ (". content"). on ("click", ".show-element", "function () {...})
+        // also in the middle of the processor this is the very descendant whom the delegate delegated to the event
 		$(".content").on("click", ".show-element",
 		    function () {
 			    //console.log(this.className);
@@ -155,5 +147,4 @@ var sendAjax = function (thas) {
 		);
 	//});
 	};
-
 })(jQuery);
