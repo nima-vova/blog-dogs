@@ -47,7 +47,7 @@ class Routing
                 $this->controllers->indexAction();
                 break;
             case "show":
-                
+
                 break;
             case "admin":
                 // if in the routine with the admin there are still elements then we are looking for what action,

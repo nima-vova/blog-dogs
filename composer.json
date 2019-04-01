@@ -10,6 +10,8 @@
     },
     "require": {
         "twig/twig": "v2.4.8",
-        "fzaninotto/faker": "^1.8"
+        "fzaninotto/faker": "^1.8",
+        "robmorgan/phinx": "^0.10.6",
+        "symfony/yaml": "^4.2"
     }
 }
